@@ -80,8 +80,10 @@ bool URadioPlayerComponent::LoadRadioStationsFromJson(TArray<FRadioStation>& Out
 	TArray<TSharedPtr<FJsonValue>> JsonArray;
 	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonString);
 
-	if (!FJsonSerializer::Deserialize(Reader, JsonArray))//Skip not Deserializable values
+	//Skip not Deserializable values
+	if (!FJsonSerializer::Deserialize(Reader, JsonArray))
 		return false;
+
 
 	for (const TSharedPtr<FJsonValue>& JsonValue : JsonArray)
 	{
@@ -92,6 +94,9 @@ bool URadioPlayerComponent::LoadRadioStationsFromJson(TArray<FRadioStation>& Out
 		FRadioStation Station;
 		if (FJsonObjectConverter::JsonObjectToUStruct(JsonObject.ToSharedRef(), &Station)) //Convert valid JSON objects to FRadioStation 
 		{
+			if(Station.IsEmpty()) //Skip empty struct
+				continue;
+
 			OutRadioStations.Add(Station);
 		}
 	}

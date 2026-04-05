@@ -24,6 +24,11 @@ struct FMusicMeta
 	{
 		return Name == Other.Name && Path == Other.Path;
 	}
+
+	bool IsEmpty() const
+	{
+		return Name == "" && Path == "";
+	}
 };
 
 
@@ -42,6 +47,11 @@ struct FRadioStation
 	{
 		return Name == Other.Name &&
 			Url == Other.Url;
+	}
+
+	bool IsEmpty() const
+	{
+		return Name == "" && Url == "";
 	}
 
 };
@@ -92,6 +102,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "PlayerMusic")
 	void AddRadioStation(const FRadioStation& RadioStation);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PlayerMusic")
+	FString GetMusicFolderPath() const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "PlayerMusic")
+	FString GetRadioStationsJsonPath() const;
+
 protected:
 
 	UFUNCTION(BlueprintCallable)
@@ -100,10 +116,6 @@ protected:
 private:
 
 	TArray<FMusicMeta> m_trackList;
-
-	FString GetMusicFolderPath() const;
-
-	FString GetRadioStationsJsonPath() const;
 
 	static bool IsSupportedAudioFile(const FString& FileName);
 
